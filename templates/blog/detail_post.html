@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE>
+<html >
+<head>
+	<title>Мой блог</title>
+	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css" media="all" />
+
+	<link rel="shortcut icon" href="css/images/favicon.ico" />
+
+</head>
+<body>
+<div class="shell">
+	<div class="border">
+
+		<div id="navigation">
+			<ul>
+			    <li><a href="#" class="active">Главная</a></li>
+			    <li><a href="#">Админ панель</a></li>
+
+			</ul>
+		</div>
+
+		<div id="main">
+			<div id="content" class="left">
+
+				<div class="projects">
+					<h3>{{ post.title }}</h3>
+                    <p align="center">
+                        <img src="{{ post.image.url }}" width="50%" />
+                    </p>
+					<div class="item">
+						<div class="text left">
+							<p>{{ post.description }}</p>
+							<p>Автор:  {{ post.author }}</p>
+						</div>
+						<div class="cl">&nbsp;</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="cl">&nbsp;</div>
+		</div>
+
+		<div>
+			<br>
+			<p>Likes: {{ post.likes_set.all.count }}</p>
+			<br>
+			<a href="{% url 'blog:add_likes' post.id %}">Like</a>
+			<a href="{% url 'blog:del_likes' post.id %}">Dislike</a>
+		</div>
+
+		<div class="form-comment">
+			<h3>Make comment</h3>
+			<div>
+				<form action="{% url 'blog:add_comments' post.id %}" method="post">
+					{% csrf_token %}
+					<div>
+						<label>Your comment</label>
+						<textarea name="text_comments"></textarea>
+					</div>
+					<div>
+						<lable>Your name</lable>
+						<input type="text" name="name">
+					</div>
+					<div>
+						<lable>Your email</lable>
+						<input type="email" name="email">
+					</div>
+					<div><input type="submit"></div>
+				</form>
+			</div>
+		</div>
+		<div>
+			{% for comment in post.comments_set.all %}
+				<div class="view_comment">
+					<h4>{{ comment.name }}</h4>
+					<p>{{ comment.text_comments }}</p>
+				</div>
+			{% endfor %}
+		</div>
+
+	</div>
+
+</div>
+</body>
+</html>
